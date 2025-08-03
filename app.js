@@ -21,58 +21,63 @@ document.addEventListener('DOMContentLoaded', () => {
  
 
     submitBtn.addEventListener('click', async () => {
-        const name = nameInput.value.trim();
-        const suggestion = suggestionInput.value.trim();
-        
-        if (!name || !suggestion) {
-            showError("Please enter your name and a suggestion before submitting.");
-            return;
-        }
+    const name = nameInput.value.trim();
+    const suggestion = suggestionInput.value.trim();
+    
+    if (!name || !suggestion) {
+        showError("Please enter your name and a suggestion before submitting.");
+        return;
+    }
 
-        // Show loading state
-        submitBtn.disabled = true;
-        submitText.textContent = "Submitting...";
-        submitSpinner.style.display = "inline-block";
-        errorMessage.style.display = "none";
+    // Show loading state
+    submitBtn.disabled = true;
+    submitText.textContent = "Submitting...";
+    submitSpinner.style.display = "inline-block";
+    errorMessage.style.display = "none";
 
-        try {
-            // Insert the user name into the users table
-            const { data: userData, error: userError } = await supabase
-                .from('users')
-                .insert([{ name }]);
+    try {
+        // Insert the user name into the users table
+        const { data: user, error: userError } = await supabase
+            .from('users')
+            .insert([{ name }])
+            .select();  
 
-            if (userError) throw userError;
+        if (userError) throw userError;
 
-            // Insert the suggestion into suggestion_table
-            const { data: suggestionData, error: suggestionError } = await supabase
-                .from('suggestion_table')
-                .insert([
-                    {
-                        content: suggestion,
-                        created_at: new Date().toISOString()
-                    }
-                ]);
+    
 
-            if (suggestionError) throw suggestionError;
+        // Insert the suggestion into suggestion_table
+        const { data: suggestionData, error: suggestionError } = await supabase
+            .from('suggestion_table')
+            .insert([
+                {
+                    content: suggestion,
+                    created_at: new Date().toISOString(),
+                    user_id: user[0].id,
+                }
+            ]);
 
-            // Show success
-            successMessage.style.display = "block";
-            nameInput.value = "";
-            suggestionInput.value = "";
+        if (suggestionError) throw suggestionError;
 
-            setTimeout(() => {
-                successMessage.style.display = "none";
-            }, 3000);
-        } catch (err) {
-            console.error("Error submitting:", err);
-            showError("Failed to submit. Please try again.");
-        } finally {
-            // Reset button state
-            submitBtn.disabled = false;
-            submitText.textContent = "Submit Suggestion";
-            submitSpinner.style.display = "none";
-        }
-    });
+        // Show success
+        successMessage.style.display = "block";
+        nameInput.value = "";
+        suggestionInput.value = "";
+
+        setTimeout(() => {
+            successMessage.style.display = "none";
+        }, 3000);
+    } catch (err) {
+        console.error("Error submitting:", err);
+        showError("Failed to submit. Please try again.");
+    } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitText.textContent = "Submit Suggestion";
+        submitSpinner.style.display = "none";
+    }
+});
+
 
      fadeEls.forEach(el => {
     el.style.animationPlayState = 'running';

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Suggestion Box</title>
+  <link rel="icon" href="favicon/favicon.ico" type="image/png" />
+  <link rel="stylesheet" href="admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+</head>
+<body>
+<div class="admin-container">
+  <div class="admin-header">
+    <i class="fas fa-list-ul"></i>
+
+    <h1>Lists of Suggestions - Admin</h1>
+  </div>
+  <div id="suggestions-container" class="suggestions-box">
+  <div class="loading-message">
+    <i class="fas fa-spinner fa-spin"></i> Loading suggestions...
+  </div>
+</div>
+
+</div>
+
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
