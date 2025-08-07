@@ -1,8 +1,9 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+import { CONFIG } from './config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-const supabaseUrl = 'https://xotjeiftthajvmbfzyeh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvdGplaWZ0dGhhanZtYmZ6eWVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxODkxOTksImV4cCI6MjA2OTc2NTE5OX0.yGIZwFkZ5qw7Reu3OJleHw-dye4GmxZ1eNJZQIeFvUQ';
+const supabaseUrl = CONFIG.SUPABASE_URL;
+const supabaseKey = CONFIG.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
   const container = document.getElementById('suggestions-container');
@@ -11,8 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   const { data, error } = await supabase
     .from('suggestion_table')
     .select('content, created_at, users(name)')
-    .order('created_at', { ascending: false }); // If 'created_at' exists; otherwise remove this line
-
+    .order('created_at', { ascending: false }); 
 
   const container = document.getElementById('suggestions-container');
 
@@ -44,4 +44,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 }
 
   loadSuggestions();
+
+  // Auto refresh every 30 seconds
+setInterval(loadSuggestions, 30000); 
 });
