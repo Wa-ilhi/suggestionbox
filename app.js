@@ -18,17 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const suggestionContainer = document.getElementById('suggestion-container');
     const fadeEls = welcomeScreen.querySelectorAll('.fade-in');  
     const typewriterElement = document.getElementById("typewriter"); 
-    const text = "Hello, I’m working on building a helpful mobile application that aims to make daily tasks easier and more efficient for users. If you have any suggestions or ideas, I’d love to hear them!";
- 
+    const text = "Hi there! 👋 I’m offering a complimentary one-page landing page for your business or products. Share your suggestion below, and I’ll reach out to you shortly.";
+    const messengerInput = document.getElementById("messenger-link");
+
+    nameInput.addEventListener("input", () => {
+    const username = nameInput.value.trim().replace(/\s+/g, "");
+    messengerInput.value = username ? `https://m.me/${username}` : "";
+    });
 
     submitBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     const suggestion = suggestionInput.value.trim();
+    const link = document.getElementById("messenger-link").value.trim();
+
     
     if (!name || !suggestion) {
-        showError("Please enter your name and a suggestion before submitting.");
-        return;
-    }
+    showError("Please enter your name and a suggestion before submitting.");
+    setTimeout(() => {
+        const errorBox = document.getElementById("errorMessage");
+        if (errorBox) {
+            errorBox.style.display = "none";
+        }
+    }, 1000);
+    return;
+}
+
 
     // Show loading state
     submitBtn.disabled = true;
@@ -52,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .from('suggestion_table')
             .insert([
                 {
-                    content: suggestion,
+                    content: suggestion,link,
                     created_at: new Date().toISOString(),
                     user_id: user[0].id,
                 }
@@ -104,7 +118,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Get visitor IP
+    async function getUserIP() {
+      try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        return data.ip;
+      } catch (error) {
+        console.error("Failed to fetch IP:", error);
+        return null;
+      }
+    }
+
+    // Add visitor if new
+    async function addVisitor(ip) {
+      const { data, error } = await supabase
+        .from("visitors")
+        .select("id")
+        .eq("ip_address", ip)
+        .single();
+
+      if (!data) {
+        const { error: insertError } = await supabase
+          .from("visitors")
+          .insert([{ ip_address: ip }]);
+
+        if (insertError) console.error("Insert failed:", insertError);
+      }
+    }
+
+    // Fetch total visitor count
+    async function getVisitorCount() {
+      const { count, error } = await supabase
+        .from("visitors")
+        .select("*", { count: "exact", head: true });
+
+      if (error) {
+        console.error("Error fetching visitor count:", error);
+        return 0;
+      }
+
+      return count;
+    }
+
+    // Initialize counter
+    window.addEventListener("load", async () => {
+      const ip = await getUserIP();
+      if (ip) {
+        await addVisitor(ip);
+      }
+      const total = await getVisitorCount();
+      document.getElementById("visitors").textContent = total;
+    });
+
   window.addEventListener("DOMContentLoaded", type);
+
+  
 
     
 });
