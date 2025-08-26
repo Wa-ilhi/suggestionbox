@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
+
   
 
 </head>
@@ -32,7 +33,13 @@
 
   <!-- Suggestion Form -->
   <div id="suggestion-container" class="container hidden">
-    <h1>Share Your Suggestion</h1>
+    <div class="heading-with-visitors">
+      <h1>Share Your Suggestion</h1>
+    <div class="visitors-counter" data-title="Total Visits">
+        <i class="fas fa-users"></i>
+        <span id="visitors">0</span>
+      </div>
+    </div>
 
     <div class="floating-group with-tooltip">
       <input type="text" id="name" class="floating-input" placeholder=" " required />
@@ -43,18 +50,45 @@
       </div>
     </div>
 
+
     <textarea id="suggestion" placeholder="What would you like to suggest?"></textarea>
+
+    <div class="floating-group with-tooltip">
+      <input 
+        type="text" 
+        id="messenger-link" 
+        class="floating-input" 
+        placeholder=" " 
+        readonly 
+      />
+      <label for="messenger-link" class="floating-label">Messenger Link</label>
+      <div class="tooltip-icon">
+        <i class="fas fa-info-circle"></i>
+        <span class="tooltip-text">
+          This link is automatically generated based on your name.
+        </span>
+      </div>
+    </div>
+
+
     <button id="submitBtn">
       <span id="submitText" style="transition: opacity 0.2s ease;">Submit Suggestion</span>
       <span id="submitSpinner" class="loading" style="display: none;"></span>
     </button>
+    
 
-    <div id="successMessage" class="success-message">
-      ✅ Thank you! Your suggestion has been submitted.
+    <!-- Success Message -->
+    <div id="successMessage" class="alert success-message">
+      <i class="fas fa-check-circle"></i>
+      <span>Thank you! Your suggestion has been submitted.</span>
     </div>
-    <div id="errorMessage" class="error-message">
-      ❌ There was an error submitting your suggestion. Please try again.
+
+    <!-- Error Message -->
+    <div id="errorMessage" class="alert error-message">
+      <i class="fas fa-times-circle"></i>
+      <span>There was an error submitting your suggestion. Please try again.</span>
     </div>
+
   </div>
 
   <!-- Supabase & Scripts -->

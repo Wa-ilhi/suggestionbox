@@ -108,27 +108,44 @@ button:hover {
   }
 }
 
-/* Feedback Messages */
-.success-message,
-.error-message {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  padding: 0.75rem;
-  border-radius: var(--radius);
-  display: none;
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  margin: 15px auto;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
 .success-message {
-  background-color: #dcfce7;
-  color: var(--success);
-  border: 1px solid var(--success);
+  background-color: #e6f8ed;
+  color: #2e7d32;
+  border-left: 5px solid #2e7d32;
 }
 
 .error-message {
-  background-color: #fee2e2;
-  color: var(--error);
-  border: 1px solid var(--error);
+  background-color: #fdecea;
+  color: #d32f2f;
+  border-left: 5px solid #d32f2f;
 }
+
+.alert i {
+  font-size: 18px;
+}
+
+#successMessage,
+#errorMessage {
+  display: none;
+ 
+}
+
 
 /* Animations */
 @keyframes fadeIn {
@@ -394,5 +411,151 @@ button:hover {
   opacity: 0.05;
   pointer-events: none;
   z-index: 0;
+}
+
+.heading-with-visitors {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ✅ Puts them on opposite sides */
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: nowrap; /* ✅ Prevents stacking */
+  width: 100%;
+}
+
+.heading-with-visitors h1 {
+  font-size: 1.8rem;
+  color: #222;
+  margin: 0;
+  white-space: nowrap; /* ✅ Prevents heading from breaking into two lines */
+}
+
+/* Visitors Counter */
+.visitors-counter {
+  position: relative; /* Needed for tooltip positioning */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.2rem;
+  color: #444;
+  background: #f7f7f7;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: 0.2s ease-in-out;
+  white-space: nowrap; /* ✅ Prevents text from wrapping */
+}
+
+.visitors-counter:hover {
+  background: #eaf3ff;
+  transform: scale(1.05);
+}
+
+/* Tooltip Styling */
+.visitors-counter::after {
+  content: attr(data-title); /* Tooltip text */
+  position: absolute;
+   top: -40px; /* Distance below the counter */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #111;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* Show Tooltip on Hover */
+.visitors-counter:hover::after {
+  opacity: 1;
+}
+
+/* Tooltip Arrow */
+.visitors-counter::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #111 transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+/* Show Arrow on Hover */
+.visitors-counter:hover::before {
+  opacity: 1;
+}
+
+.visitors-counter i {
+  color: #007bff;
+  font-size: 1.4rem;
+}
+
+.visitors-counter span {
+  font-weight: bold;
+}
+
+/* ✅ RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+  .heading-with-visitors {
+    flex-direction: row; /* ✅ Place counter beside heading */
+    align-items: center;
+    justify-content: flex-start; /* Align content to the left */
+    gap: 12px;
+  }
+
+  .heading-with-visitors h1 {
+    font-size: 1.5rem;
+  }
+
+  .visitors-counter {
+    font-size: 1rem;
+    padding: 5px 10px;
+  }
+
+  .visitors-counter i {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading-with-visitors {
+    flex-direction: row; 
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .heading-with-visitors h1 {
+    font-size: 1.2rem;
+  }
+
+  .visitors-counter {
+    font-size: 0.95rem;
+    padding: 4px 8px;
+  }
+
+  .visitors-counter i {
+    font-size: 1rem;
+  }
+
+  .visitors-counter::after {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+    top: -35px;
+  }
+
+  .visitors-counter:hover::after {
+    top: -40px;
+  }
 }
 
